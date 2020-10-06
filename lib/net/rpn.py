@@ -7,6 +7,8 @@ import lib.utils.loss_utils as loss_utils
 from lib.config import cfg
 import importlib
 from pointnet2_msg import Pointnet2MSG
+from pointnet2_msg import Pointnet2MSG_returnMiddleStages
+from depth_net import DepthCompletionNet
 
 
 class RPN(nn.Module):
@@ -18,7 +20,7 @@ class RPN(nn.Module):
         # self.backbone_net = MODEL.get_model(input_channels=int(cfg.RPN.USE_INTENSITY), use_xyz=use_xyz)
         input_channels = int(cfg.RPN.USE_INTENSITY) + 3 * int(cfg.RPN.USE_RGB)
         if cfg.RPN.BACKBONE == 'pointnet2_msg':
-            self.backbone_net = Pointnet2MSG(input_channels =input_channels, use_xyz = use_xyz)
+            self.backbone_net = Pointnet2MSG_returnMiddleStages(input_channels =input_channels, use_xyz = use_xyz)
 
         # classification branch
         cls_layers = []
