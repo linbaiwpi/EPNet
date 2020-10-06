@@ -64,7 +64,7 @@ class RCNNNet(nn.Module):
         else:
             raise NotImplementedError
 
-        if cfg.USE_IOU_BRANCH:
+        if cfg.USE_IOU_BRANCH: ## False
             iou_branch = []
             iou_branch.append(pt_utils.Conv1d(channel_in, cfg.RCNN.REG_FC[0], bn=cfg.RCNN.USE_BN))
             iou_branch.append(pt_utils.Conv1d(cfg.RCNN.REG_FC[0], cfg.RCNN.REG_FC[1], bn=cfg.RCNN.USE_BN))
@@ -193,7 +193,7 @@ class RCNNNet(nn.Module):
 
         rcnn_cls = self.cls_layer(l_features[-1]).transpose(1, 2).contiguous().squeeze(dim=1)  # (B, 1 or 2)
         rcnn_reg = self.reg_layer(l_features[-1]).transpose(1, 2).contiguous().squeeze(dim=1)  # (B, C)
-        if cfg.USE_IOU_BRANCH:
+        if cfg.USE_IOU_BRANCH: ## False
             rcnn_iou_branch = self.iou_branch(l_features[-1]).transpose(1, 2).contiguous().squeeze(dim=1)  # (B,1)
             ret_dict = {'rcnn_cls': rcnn_cls, 'rcnn_reg': rcnn_reg, 'rcnn_iou_branch': rcnn_iou_branch}
         else:

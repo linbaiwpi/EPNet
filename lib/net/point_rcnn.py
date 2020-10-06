@@ -11,6 +11,9 @@ class PointRCNN(nn.Module):
 
         assert cfg.RPN.ENABLED or cfg.RCNN.ENABLED
 
+        '''
+        PointRCNN包含RPN和RCNN两个模块，定义如下：
+        '''
         if cfg.RPN.ENABLED:
             self.rpn = RPN(use_xyz = use_xyz, mode = mode)
 
@@ -29,6 +32,10 @@ class PointRCNN(nn.Module):
         if cfg.RPN.ENABLED:
             output = { }
             # rpn inference
+            '''
+            当cfg.RPN.FIXED，RPN不固定并且训练（training）时，允许计算梯度
+            调用net/rpn.py中的RPN模块
+            '''
             with torch.set_grad_enabled((not cfg.RPN.FIXED) and self.training):
                 if cfg.RPN.FIXED:
                     self.rpn.eval()

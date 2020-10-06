@@ -169,6 +169,7 @@ if __name__ == "__main__":
         cfg.RPN.ENABLED = cfg.RPN.FIXED = True
         root_result_dir = os.path.join('../', 'output', 'rcnn', cfg.TAG)
     elif args.train_mode == 'rcnn_online':
+        # 只有rcnn_online被用于end-to-end训练
         cfg.RCNN.ENABLED = True
         cfg.RPN.ENABLED = True
         cfg.RPN.FIXED = False

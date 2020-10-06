@@ -49,6 +49,9 @@ class Fusion_Conv(nn.Module):
 
 
 #================addition attention (add)=======================#
+'''
+这就是Fig 3中的LI-Fusion Layer (不完全)
+'''
 class IA_Layer(nn.Module):
     def __init__(self, channels):
         print('##############ADDITION ATTENTION(ADD)#########')
@@ -80,7 +83,9 @@ class IA_Layer(nn.Module):
 
         return out
 
-
+'''
+这就是Fig 3中的LI-Fusion Layer (最后concatenate部分)
+'''
 class Atten_Fusion_Conv(nn.Module):
     def __init__(self, inplanes_I, inplanes_P, outplanes):
         super(Atten_Fusion_Conv, self).__init__()
@@ -132,7 +137,7 @@ class Pointnet2MSG(nn.Module):
         channel_in = input_channels
 
         skip_channel_list = [input_channels]
-        for k in range(cfg.RPN.SA_CONFIG.NPOINTS.__len__()):
+        for k in range(cfg.RPN.SA_CONFIG.NPOINTS.__len__()): # 4 layer
             mlps = cfg.RPN.SA_CONFIG.MLPS[k].copy()
             channel_out = 0
             for idx in range(mlps.__len__()):
@@ -159,6 +164,9 @@ class Pointnet2MSG(nn.Module):
             self.DeConv = nn.ModuleList()
             for i in range(len(cfg.LI_FUSION.IMG_CHANNELS) - 1):
                 self.Img_Block.append(BasicBlock(cfg.LI_FUSION.IMG_CHANNELS[i], cfg.LI_FUSION.IMG_CHANNELS[i+1], stride=1))
+                '''
+                LI_Function中为True
+                '''
                 if cfg.LI_FUSION.ADD_Image_Attention:
                     self.Fusion_Conv.append(
                         Atten_Fusion_Conv(cfg.LI_FUSION.IMG_CHANNELS[i + 1], cfg.LI_FUSION.POINT_CHANNELS[i],
@@ -174,6 +182,9 @@ class Pointnet2MSG(nn.Module):
             self.image_fusion_conv = nn.Conv2d(sum(cfg.LI_FUSION.DeConv_Reduce), cfg.LI_FUSION.IMG_FEATURES_CHANNEL//4, kernel_size = 1)
             self.image_fusion_bn = torch.nn.BatchNorm2d(cfg.LI_FUSION.IMG_FEATURES_CHANNEL//4)
 
+            '''
+            LI_Function中为True
+            '''
             if cfg.LI_FUSION.ADD_Image_Attention:
                 self.final_fusion_img_point = Atten_Fusion_Conv(cfg.LI_FUSION.IMG_FEATURES_CHANNEL//4, cfg.LI_FUSION.IMG_FEATURES_CHANNEL, cfg.LI_FUSION.IMG_FEATURES_CHANNEL)
             else:

@@ -264,7 +264,9 @@ class KittiRCNNDataset(KittiDataset):
     def __getitem__(self, index):
         if cfg.LI_FUSION.ENABLED:
             return self.get_rpn_with_li_fusion(index)
-
+        '''
+        EPNet使用End-to-End训练，并没有使用以下代码
+        '''
         if cfg.RPN.ENABLED:
             return self.get_rpn_sample(index)
         elif cfg.RCNN.ENABLED:
